@@ -12,7 +12,7 @@ mongoose.connect(MONGO_URI, {
 const app = express();
 
 app.use(express.json());
-// app.use('/api', noteRoutes);
+app.use('/api', noteRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT} IN THE MODE ${NODE_ENV} .`);
