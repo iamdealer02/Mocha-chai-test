@@ -7,7 +7,7 @@ const rewire = require("rewire");
 const request = require("supertest");
 const sandbox = sinon.createSandbox();
 let app = rewire("../app");
-
+const healthCheckController = require("../controllers/health.controller");
 const noteController = require("../controllers/note.controller");
 
 
@@ -18,6 +18,32 @@ describe("Testing express app routes", () => {
     
         
     });
+    describe("GET /health", () => {
+        beforeEach(() => {
+          sandbox.stub(healthCheckController, "healthCheckSync").returns("OK");
+          sandbox.stub(healthCheckController, "healthCheckAsync").resolves("OK");
+        });
+    
+        it("/sync should succeed", (done) => {
+          request(app)
+            .get("/health/sync")
+            .expect(200)
+            .end((err, response) => {
+              expect(response.body).to.have.property("health").to.equal("OK");
+              done(err);
+            });
+        });
+    
+        it("/async should succeed", (done) => {
+          request(app)
+            .get("/health/async")
+            .expect(200)
+            .end((err, response) => {
+              expect(response.body).to.have.property("health").to.equal("OK");
+              done(err);
+            });
+        });
+      });
     describe("Testing /note routes", () => {
         let sampleNoteValue;
 
