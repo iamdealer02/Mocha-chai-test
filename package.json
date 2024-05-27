@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start" : "node server.js",
+    "start": "node server.js",
     "dev": "cross-env NODE_ENV=dev node server.js",
     "prod": "cross-env NODE_ENV=prod node server.js",
     "release": "cross-env NODE_ENV=release node server.js"
@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.19.2",
     "mongoose": "^8.3.5"
   },
