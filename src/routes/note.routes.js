@@ -1,26 +1,46 @@
 const express = require('express');
 const router = express.Router();
-const Note = require('../models/note.model');
+// controller
+const noteController = require('../controllers/note.controller');
 
 // Create a new note
 router.post('/notes', async (req, res) => {
     const { title, content } = req.body;
     try {
-        const note = new Note({ title, content });
-        await note.save();
-        res.status(201).json(note);
+       const note = await noteController.create({ title, content });
+       res.json({
+              message: 'Note created successfully',
+              note,
+              status: 'success'
+         
+       });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.json({
+            item: null,
+            status: err.code || err.statusCode || 500,
+            message:
+              err.message || "Something went wrong while reading item from DB!",
+          });
     }
 });
 
 // Get all notes
 router.get('/notes', async (req, res) => {
     try {
-        const notes = await Note.find();
-        res.json(notes);
+        const notes = await noteController.findAll();
+        res.json({
+            message: 'Notes fetched successfully',
+            notes,
+            status: 'success'
+        
+        });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.json({
+            item: null,
+            status: err.code || err.statusCode || 500,
+            message:
+              err.message || "Something went wrong while reading item from DB!",
+          });
     }
 });
 
@@ -28,13 +48,23 @@ router.get('/notes', async (req, res) => {
 router.get('/notes/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const note = await Note.findById(id);
+        const note = await noteController.findOne(id);
         if (!note) {
             return res.status(404).json({ message: 'Note not found' });
         }
-        res.json(note);
+        res.json({
+            message: 'Note fetched successfully',
+            note,
+            status: 'success'
+        
+        });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.json({
+            item: null,
+            status: err.code || err.statusCode || 500,
+            message:
+              err.message || "Something went wrong while reading item from DB!",
+          });
     }
 });
 
@@ -43,13 +73,21 @@ router.put('/notes/:id', async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
     try {
-        const updatedNote = await Note.findByIdAndUpdate(id, { title, content }, { new: true });
-        if (!updatedNote) {
+        const note = await noteController.update(id, { title, content });
+        if (!note) {
             return res.status(404).json({ message: 'Note not found' });
         }
-        res.json(updatedNote);
+        res.json({ 
+            message: 'Note updated successfully', 
+            note,
+            status: 'success'});
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.json({
+            item: null,
+            status: err.code || err.statusCode || 500,
+            message:
+              err.message || "Something went wrong while reading item from DB!",
+          });
     }
 });
 
@@ -57,13 +95,18 @@ router.put('/notes/:id', async (req, res) => {
 router.delete('/notes/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const deletedNote = await Note.findByIdAndDelete(id);
-        if (!deletedNote) {
+        const note = await noteController.delete(id);
+        if (!note) {
             return res.status(404).json({ message: 'Note not found' });
         }
-        res.json({ message: 'Note deleted successfully' });
+        res.json({ message: 'Note deleted successfully', status: 'success' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.json({
+            item: null,
+            status: err.code || err.statusCode || 500,
+            message:
+              err.message || "Something went wrong while reading item from DB!",
+          });
     }
 });
 
