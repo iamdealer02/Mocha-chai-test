@@ -1,46 +1,26 @@
 const express = require('express');
 const router = express.Router();
-// controller
-const noteController = require('../controllers/note.controller');
+const Note = require('../models/note.model');
 
 // Create a new note
 router.post('/notes', async (req, res) => {
     const { title, content } = req.body;
     try {
-       const note = await noteController.create({ title, content });
-       res.json({
-              message: 'Note created successfully',
-              note,
-              status: 'success'
-         
-       });
+        const note = new Note({ title, content });
+        await note.save();
+        res.status(201).json(note);
     } catch (error) {
-        res.json({
-            item: null,
-            status: err.code || err.statusCode || 500,
-            message:
-              err.message || "Something went wrong while reading item from DB!",
-          });
+        res.status(400).json({ message: error.message });
     }
 });
 
 // Get all notes
 router.get('/notes', async (req, res) => {
     try {
-        const notes = await noteController.findAll();
-        res.json({
-            message: 'Notes fetched successfully',
-            notes,
-            status: 'success'
-        
-        });
+        const notes = await Note.find();
+        res.json(notes);
     } catch (error) {
-        res.json({
-            item: null,
-            status: err.code || err.statusCode || 500,
-            message:
-              err.message || "Something went wrong while reading item from DB!",
-          });
+        res.status(500).json({ message: error.message });
     }
 });
 
@@ -48,23 +28,13 @@ router.get('/notes', async (req, res) => {
 router.get('/notes/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const note = await noteController.findOne(id);
+        const note = await Note.findById(id);
         if (!note) {
             return res.status(404).json({ message: 'Note not found' });
         }
-        res.json({
-            message: 'Note fetched successfully',
-            note,
-            status: 'success'
-        
-        });
+        res.json(note);
     } catch (error) {
-        res.json({
-            item: null,
-            status: err.code || err.statusCode || 500,
-            message:
-              err.message || "Something went wrong while reading item from DB!",
-          });
+        res.status(500).json({ message: error.message });
     }
 });
 
@@ -73,21 +43,13 @@ router.put('/notes/:id', async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
     try {
-        const note = await noteController.update(id, { title, content });
-        if (!note) {
+        const updatedNote = await Note.findByIdAndUpdate(id, { title, content }, { new: true });
+        if (!updatedNote) {
             return res.status(404).json({ message: 'Note not found' });
         }
-        res.json({ 
-            message: 'Note updated successfully', 
-            note,
-            status: 'success'});
+        res.json(updatedNote);
     } catch (error) {
-        res.json({
-            item: null,
-            status: err.code || err.statusCode || 500,
-            message:
-              err.message || "Something went wrong while reading item from DB!",
-          });
+        res.status(500).json({ message: error.message });
     }
 });
 
@@ -95,18 +57,13 @@ router.put('/notes/:id', async (req, res) => {
 router.delete('/notes/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const note = await noteController.delete(id);
-        if (!note) {
+        const deletedNote = await Note.findByIdAndDelete(id);
+        if (!deletedNote) {
             return res.status(404).json({ message: 'Note not found' });
         }
-        res.json({ message: 'Note deleted successfully', status: 'success' });
+        res.json({ message: 'Note deleted successfully' });
     } catch (error) {
-        res.json({
-            item: null,
-            status: err.code || err.statusCode || 500,
-            message:
-              err.message || "Something went wrong while reading item from DB!",
-          });
+        res.status(500).json({ message: error.message });
     }
 });
 
