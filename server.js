@@ -1,7 +1,7 @@
 const config =  require('./config.js');
 const express = require('express');
 const mongoose = require('mongoose');
-const noteRoutes = require('./routes/noteRoutes');
+const noteRoutes = require('./src/routes/note.routes');
 
 const { PORT,NODE_ENV, MONGO_URI} = config;
 
