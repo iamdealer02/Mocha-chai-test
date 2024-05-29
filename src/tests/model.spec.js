@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 const mongoose = require('mongoose');
-
+const ValidationError = mongoose.Error.ValidationError;
 
 
 var Note = require('../models/note.model');
@@ -10,29 +10,20 @@ describe('Note Model Test', () => {
     let sampleNoteValue;
     beforeEach(() => {
         sampleNoteValue = {
-          
+            content: "Test Content"
         };
     });
     
     // missing fields
-    it('it should throw an error due to missing fields', (done) => {
-        console.log('Starting test case...');
-      
+    it('it should throw an error due to missing fields',  (done) => {
         const note = new Note();
         note.validate((err) => {
-            console.log('Validation completed...');
-            if (err) {
-                console.log('Error occurred:', err);
-                done(); // Call done() to signal the completion of the test
-            } else {
-                console.log('No error occurred, unexpected behavior...');
-                done(new Error('Expected error did not occur')); // Call done() with an error if validation succeeds unexpectedly
-            }
+            expect(err.errors.title).to.exist;
+            expect(err.errors.content).to.exist;
+            done();
         });
     });
-    
     it('should create a new note with correct params',  (done) => {
-        console.log('inside 2');
         const note = new Note({
             ...sampleNoteValue,
             title: 'Test Title'
