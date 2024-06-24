@@ -7,4 +7,4 @@ const server = app.listen(PORT, () => {
 	console.log(`Application running on port: ${PORT} in ${NODE_ENV} mode`);
 });
 
-module.exports = server;
+export default server;
