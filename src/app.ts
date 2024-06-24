@@ -14,11 +14,11 @@ app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: false,
-  })
+  }),
 );
 app.use(cors());
 
-app.get("/", (_req: Request, res: Response) => {
+app.get('/', (_req: Request, res: Response) => {
   res.json({
     status: true,
   });
@@ -27,12 +27,14 @@ app.get("/", (_req: Request, res: Response) => {
 app.use('/', noteRoutes);
 app.use('/health', healthRoutes);
 
-mongoose.connect(MONGO_URI).catch(error => console.error('MongoDB Connection Error:', error));
+mongoose
+  .connect(MONGO_URI)
+  .catch((error) => console.error('MongoDB Connection Error:', error));
 
 mongoose.Promise = global.Promise;
 
-mongoose.connection.on("error", (error) => {
-  console.error("MongoDB Connection Error", error);
+mongoose.connection.on('error', (error) => {
+  console.error('MongoDB Connection Error', error);
 });
 
 export default app;
