@@ -1,9 +1,10 @@
-const express = require("express");
-const healthCheckController = require("../controllers/health.controller");
+import express, { Response } from 'express';
+
+import * as healthCheckController from '../controllers/health.controller';
 
 const router = express.Router();
 
-router.get("/sync", (req, res) => {
+router.get('/sync', (_req, res: Response) => {
   const result = healthCheckController.healthCheckSync();
   res.json({
     health: result,
@@ -11,7 +12,7 @@ router.get("/sync", (req, res) => {
   });
 });
 
-router.get("/async", async (req, res) => {
+router.get('/async', async (_req, res: Response) => {
   const result = await healthCheckController.healthCheckAsync();
   res.json({
     health: result,
@@ -19,4 +20,4 @@ router.get("/async", async (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

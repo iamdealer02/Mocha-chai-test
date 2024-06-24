@@ -1,6 +1,6 @@
 import { Inote } from 'src/interface/note.interface';
 import { HydratedDocument } from 'mongoose';
-import { Note } from 'src/models/note.model';
+import { Note } from '../models/note.model';
 
 export const create = async (noteObj: Inote): Promise<Inote> => {
   if (!noteObj || !noteObj.title || !noteObj.content) {

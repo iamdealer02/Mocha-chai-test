@@ -5,9 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "cross-env NODE_ENV=dev node server.js",
-    "prod": "cross-env NODE_ENV=prod node server.js",
-    "release": "cross-env NODE_ENV=release node server.js",
+    "dev": "cross-env NODE_ENV=dev ts-node server.ts",
+    "prod": "cross-env NODE_ENV=prod ts-node server.ts",
+    "release": "cross-env NODE_ENV=release ts-node server.js",
     "test:watch": "cross-env NODE_ENV=dev mocha --watch ./src/tests/*.spec.js",
     "test": "cross-env NODE_ENV=dev mocha ./src/tests/*.spec.js --exit",
     "compile:dry": "npx tsc --noEmit",
@@ -33,6 +33,7 @@
   "devDependencies": {
     "@eslint/compat": "^1.1.0",
     "@eslint/js": "^9.5.0",
+    "@types/dotenv": "^8.2.0",
     "@typescript-eslint/eslint-plugin": "^7.13.0",
     "@typescript-eslint/parser": "^7.13.0",
     "chai": "^4.3.6",

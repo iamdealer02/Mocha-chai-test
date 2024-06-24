@@ -1,5 +1,5 @@
-exports.healthCheckSync = (): string => 'OK';
+export const healthCheckSync = (): string => 'OK';
 
-exports.healthCheckAsync = (): Promise<string> => {
+export const healthCheckAsync = (): Promise<string> => {
   return Promise.resolve('OK');
 };
